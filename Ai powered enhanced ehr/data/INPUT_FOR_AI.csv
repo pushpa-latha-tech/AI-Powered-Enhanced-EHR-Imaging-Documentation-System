@@ -1,0 +1,16 @@
+patient_id,patient_name,age,gender,symptoms,mri_findings,provisional_diagnosis
+10651,Priya Sharma,60,Female,Occasional dizziness,"Smooth, homogeneous lesion with no aggressive features.",Benign Brain Tumor
+2042,Aishwarya Patel,70,Female,"Progressive headache, vomiting, seizures",Irregular enhancing mass lesion seen in the brain with mass effect.,Malignant Brain Tumor
+8669,Rohan Singh,47,Male,Occasional dizziness,"Small non-enhancing lesion seen, appearance consistent with low-grade tumor.",Benign Brain Tumor
+1115,Priya Kumar,54,Female,Weakness in limbs,Irregular enhancing mass lesion seen in the brain with mass effect.,Malignant Brain Tumor
+13903,Riya Sharma,41,Female,Mild tension headache,MRI brain is normal. No focal lesion or abnormality detected.,No Tumor
+11964,Arjun Kumar,45,Male,Occasional dizziness,"Smooth, homogeneous lesion with no aggressive features.",Benign Brain Tumor
+11073,Divya Patel,43,Female,"Progressive headache, vomiting, seizures",MRI shows an enhancing brain tumor with irregular margins and surrounding edema.,Malignant Brain Tumor
+3003,Arjun Patel,28,Male,Personality changes,MRI shows an enhancing brain tumor with irregular margins and surrounding edema.,Malignant Brain Tumor
+19772,Riya Patel,49,Female,Occasional dizziness,"Smooth, homogeneous lesion with no aggressive features.",Benign Brain Tumor
+8116,Aryan Gupta,45,Male,Personality changes,MRI shows an enhancing brain tumor with irregular margins and surrounding edema.,Malignant Brain Tumor
+3526,Arjun Singh,54,Male,"Progressive headache, vomiting, seizures",Large hyperintense lesion on T1 with contrast enhancement suggestive of high-grade tumor.,Malignant Brain Tumor
+7880,Karan Reddy,23,Male,Weakness in limbs,MRI shows an enhancing brain tumor with irregular margins and surrounding edema.,Malignant Brain Tumor
+16442,Aishwarya Singh,20,Female,Mild headache,"MRI reveals a well-defined extra-axial lesion, likely benign (meningioma/low-grade).",Benign Brain Tumor
+16297,Rohan Reddy,74,Male,Personality changes,MRI shows an enhancing brain tumor with irregular margins and surrounding edema.,Malignant Brain Tumor
+12567,Priya Kumar,61,Female,Weakness in limbs,Large hyperintense lesion on T1 with contrast enhancement suggestive of high-grade tumor.,Malignant Brain Tumor

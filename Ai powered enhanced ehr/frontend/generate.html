@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Note Generator - EHR GenAI</title>
+    <meta name="description" content="AI-powered clinical note generation with automatic ICD-10 coding">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+    </button>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
+                <div>
+                    <h1>EHR GenAI</h1>
+                    <span>Medical AI Platform</span>
+                </div>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="9" />
+                                <rect x="14" y="3" width="7" height="5" />
+                                <rect x="14" y="12" width="7" height="9" />
+                                <rect x="3" y="16" width="7" height="5" />
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="enhance.html" class="nav-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <polyline points="21 15 16 10 5 21" />
+                            </svg>
+                            Image Enhancement
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="generate.html" class="nav-link active">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                            </svg>
+                            Clinical Notes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="records.html" class="nav-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            </svg>
+                            Patient Records
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: var(--space-lg); border-top: 1px solid var(--border-color);">
+                <button class="nav-link theme-toggle-btn" onclick="EHRApp.toggleTheme()"
+                    style="width: 100%; border: none; background: transparent; cursor: pointer; margin-bottom: var(--space-md); text-align: left; padding: var(--space-md) 0;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width: 20px; height: 20px;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <span>Night Mode</span>
+                </button>
+                <div class="flex items-center justify-between">
+                    <span class="text-muted" style="font-size: 0.875rem;">API Status</span>
+                    <span id="apiStatus"><span class="badge badge-warning">● Checking...</span></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Clinical Note <span class="text-gradient">Generator</span></h1>
+                <p class="page-subtitle">Generate AI-powered clinical notes with automatic ICD-10 coding</p>
+            </div>
+
+            <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+                <!-- Patient Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Patient Information</h2>
+                    </div>
+
+                    <form id="patientForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Patient ID</label>
+                                <input type="text" class="form-input" id="patientId" placeholder="P001" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Age</label>
+                                <input type="number" class="form-input" id="age" placeholder="45" min="1" max="120"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" id="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Chief Complaint</label>
+                            <input type="text" class="form-input" id="chiefComplaint"
+                                placeholder="Persistent headache for 2 weeks" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Medical History (Optional)</label>
+                            <textarea class="form-textarea" id="history"
+                                placeholder="No prior history of neurological conditions"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">MRI/Imaging Observations</label>
+                            <textarea class="form-textarea" id="observations"
+                                placeholder="MRI brain shows irregular enhancing lesion in right temporal lobe"
+                                required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Preliminary Diagnosis</label>
+                            <input type="text" class="form-input" id="prelimDiagnosis"
+                                placeholder="Brain tumor suspected" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="generateBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                            </svg>
+                            Generate Clinical Note
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Result Panel -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Generated Note</h2>
+                        <button class="btn btn-secondary btn-icon" id="copyBtn" title="Copy to clipboard"
+                            style="display: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Placeholder -->
+                    <div id="resultPlaceholder" class="text-center" style="padding: var(--space-2xl);">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" style="color: var(--text-muted); margin-bottom: var(--space-md);">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                        <p class="text-muted">Fill in patient information and click Generate to create a clinical note
+                            with ICD-10 code</p>
+                    </div>
+
+                    <!-- Result Content -->
+                    <div id="resultContent" style="display: none;">
+                        <div class="result-card">
+                            <div style="margin-bottom: var(--space-md);">
+                                <span class="badge badge-success">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                    AI Generated
+                                </span>
+                                <span id="patientIdBadge" class="badge badge-info"
+                                    style="margin-left: var(--space-sm);"></span>
+                            </div>
+
+                            <h4 style="margin-bottom: var(--space-sm);">Clinical Note</h4>
+                            <div class="clinical-note" id="generatedNote"></div>
+
+                            <h4 style="margin-bottom: var(--space-sm);">ICD-10 Code</h4>
+                            <div id="icdCodes"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Data Card -->
+            <div class="card mt-lg">
+                <h3 style="margin-bottom: var(--space-md);">Quick Fill Examples</h3>
+                <div class="flex gap-md" style="flex-wrap: wrap;">
+                    <button class="btn btn-secondary" onclick="fillSample('malignant')">
+                        🧠 Malignant Tumor Case
+                    </button>
+                    <button class="btn btn-secondary" onclick="fillSample('benign')">
+                        🔵 Benign Tumor Case
+                    </button>
+                    <button class="btn btn-secondary" onclick="fillSample('normal')">
+                        ✅ Normal MRI Case
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        const patientForm = document.getElementById('patientForm');
+        const resultPlaceholder = document.getElementById('resultPlaceholder');
+        const resultContent = document.getElementById('resultContent');
+        const generatedNote = document.getElementById('generatedNote');
+        const icdCodes = document.getElementById('icdCodes');
+        const copyBtn = document.getElementById('copyBtn');
+        const patientIdBadge = document.getElementById('patientIdBadge');
+
+        let currentNote = '';
+
+        // Form submission
+        patientForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const patientData = {
+                patient_id: document.getElementById('patientId').value,
+                age: parseInt(document.getElementById('age').value),
+                gender: document.getElementById('gender').value,
+                chief_complaint: document.getElementById('chiefComplaint').value,
+                history: document.getElementById('history').value,
+                observations: document.getElementById('observations').value,
+                prelim_diagnosis: document.getElementById('prelimDiagnosis').value
+            };
+
+            try {
+                EHRApp.showLoading('Generating clinical note with AI...');
+                const result = await EHRApi.generateNote(patientData);
+                EHRApp.hideLoading();
+
+                // Display result
+                resultPlaceholder.style.display = 'none';
+                resultContent.style.display = 'block';
+                copyBtn.style.display = 'flex';
+
+                patientIdBadge.textContent = `Patient: ${result.patient_id}`;
+                generatedNote.textContent = result.note;
+                currentNote = result.note;
+
+                // Display ICD-10 codes
+                icdCodes.innerHTML = result.icd10.map(code => `
+                    <div class="icd-badge">
+                        <span class="icd-code">${code.code}</span>
+                        <span>${code.description}</span>
+                    </div>
+                `).join('');
+
+                EHRApp.showToast('Clinical note generated successfully!', 'success');
+            } catch (error) {
+                EHRApp.hideLoading();
+                EHRApp.showToast('Generation failed. Is the API running?', 'error');
+            }
+        });
+
+        // Copy to clipboard
+        copyBtn.addEventListener('click', () => {
+            const fullText = `Clinical Note:\n${currentNote}\n\nICD-10: ${icdCodes.textContent}`;
+            EHRApp.copyToClipboard(fullText);
+        });
+
+        // Sample data fill
+        function fillSample(type) {
+            const samples = {
+                malignant: {
+                    patientId: 'P1001',
+                    age: 52,
+                    gender: 'Male',
+                    chiefComplaint: 'Progressive headache, vomiting, and seizures for 3 weeks',
+                    history: 'No prior history of neurological conditions',
+                    observations: 'MRI brain shows irregular enhancing mass lesion in right temporal lobe with surrounding edema and mass effect',
+                    prelimDiagnosis: 'Malignant Brain Tumor'
+                },
+                benign: {
+                    patientId: 'P1002',
+                    age: 38,
+                    gender: 'Female',
+                    chiefComplaint: 'Occasional dizziness and mild headache',
+                    history: 'Hypertension controlled on medication',
+                    observations: 'MRI brain reveals a well-defined extra-axial lesion with smooth margins, likely meningioma',
+                    prelimDiagnosis: 'Benign Brain Tumor'
+                },
+                normal: {
+                    patientId: 'P1003',
+                    age: 29,
+                    gender: 'Female',
+                    chiefComplaint: 'Mild tension headache for 1 week',
+                    history: 'Recent work stress, no neurological history',
+                    observations: 'MRI brain is normal. No focal lesion or abnormality detected',
+                    prelimDiagnosis: 'No Tumor - Tension Headache'
+                }
+            };
+
+            const sample = samples[type];
+            document.getElementById('patientId').value = sample.patientId;
+            document.getElementById('age').value = sample.age;
+            document.getElementById('gender').value = sample.gender;
+            document.getElementById('chiefComplaint').value = sample.chiefComplaint;
+            document.getElementById('history').value = sample.history;
+            document.getElementById('observations').value = sample.observations;
+            document.getElementById('prelimDiagnosis').value = sample.prelimDiagnosis;
+
+            EHRApp.showToast('Sample data filled!', 'info');
+        }
+    </script>
+</body>
+
+</html>
